@@ -10,10 +10,13 @@ import org.springframework.context.annotation.Profile;
 
 import com.Kalutech.curso.entities.Category;
 import com.Kalutech.curso.entities.Order;
+import com.Kalutech.curso.entities.OrderItem;
+import com.Kalutech.curso.entities.Payment;
 import com.Kalutech.curso.entities.Product;
 import com.Kalutech.curso.entities.User;
 import com.Kalutech.curso.entities.enums.OrderStatus;
 import com.Kalutech.curso.repositories.CategoryRepository;
+import com.Kalutech.curso.repositories.OrderItemRepository;
 import com.Kalutech.curso.repositories.OrderRepository;
 import com.Kalutech.curso.repositories.ProductRepository;
 import com.Kalutech.curso.repositories.UserRepository;
@@ -33,6 +36,9 @@ public class TesteConfig implements CommandLineRunner {
 
 	@Autowired
 	private ProductRepository productRepository;
+	
+	@Autowired
+	private OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -72,6 +78,19 @@ public class TesteConfig implements CommandLineRunner {
 
 		userRepository.saveAll(Arrays.asList(u1, u2));
 		orderRepository.saveAll(Arrays.asList(o1, o2, o3));
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 2, p1.getPrice());
+		OrderItem oi2 = new OrderItem(o1, p3, 1, p3.getPrice());
+		OrderItem oi3 = new OrderItem(o2, p3, 2, p3.getPrice());
+		OrderItem oi4 = new OrderItem(o3, p5, 2, p5.getPrice());
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+		
+		Payment pay1 = new Payment(null,Instant.parse("2019-06-20T21:53:07Z"),o1 );
+		
+		o1.setPayment(pay1);
+		
+		orderRepository.save(o1);
 
 	}
 
